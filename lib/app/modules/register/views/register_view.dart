@@ -1,14 +1,15 @@
 import 'package:auditplus/app/customs/custom_colors.dart';
-import 'package:auditplus/app/modules/home/home_view.dart';
+import 'package:auditplus/app/modules/register/controller/register_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class RegisterView extends StatelessWidget {
-  final RxBool checked = false.obs;
-
   @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
+    final controller = Get.put(RegisterController());
+
     return Scaffold(
       backgroundColor: CustomColors.grey400,
       body: Center(
@@ -25,7 +26,7 @@ class RegisterView extends StatelessWidget {
             ],
           ),
           child: Form(
-            autovalidateMode: AutovalidateMode.disabled,
+            key: _formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -52,50 +53,25 @@ class RegisterView extends StatelessWidget {
                 SizedBox(
                   width: 400.w,
                   child: TextFormField(
+                    controller: controller.nameController,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       label: Text("Name"),
+                      hintText: "Firstname Lastname",
                       prefixIcon: Icon(Icons.person_outline),
                       isDense: true,
                     ),
-                    onSaved: (val) {
-                      print(val);
-                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (input) {
-                      return input == null || input.isEmpty
-                          ? 'Please enter valid name.'
-                          : null;
-                    },
-                    onFieldSubmitted: (val) {
-                      print(val);
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: 20.w,
-                ),
-                SizedBox(
-                  width: 400.w,
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      label: Text("Email-Id"),
-                      prefixIcon: Icon(Icons.email_outlined),
-                      isDense: true,
-                    ),
-                    onSaved: (val) {
-                      print(val);
-                    },
-                    validator: (input) {
-                      if (input == null ||
-                          input.isEmpty ||
-                          !input.contains("@")) {
-                        return 'Please enter valid email.';
+                      if (input == null || input.isEmpty) {
+                        return '* Required';
+                      } else if (input.isNumericOnly || input.isEmail) {
+                        return 'Enter valid name.';
                       }
                       return null;
                     },
                     onFieldSubmitted: (val) {
-                      print(val);
+                      controller.nameController.text = val;
                     },
                   ),
                 ),
@@ -105,6 +81,35 @@ class RegisterView extends StatelessWidget {
                 SizedBox(
                   width: 400.w,
                   child: TextFormField(
+                    controller: controller.emailController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      label: Text("Email-Id"),
+                      hintText: "example@email.com",
+                      prefixIcon: Icon(Icons.email_outlined),
+                      isDense: true,
+                    ),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (input) {
+                      if (input == null || input.isEmpty) {
+                        return '* Required';
+                      } else if (!input.isEmail) {
+                        return 'Enter valid e-mail.';
+                      }
+                      return null;
+                    },
+                    onFieldSubmitted: (val) {
+                      controller.emailController.text = val;
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 20.w,
+                ),
+                SizedBox(
+                  width: 400.w,
+                  child: TextFormField(
+                    controller: controller.phoneController,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       label: Text("Phone no."),
@@ -112,18 +117,18 @@ class RegisterView extends StatelessWidget {
                       prefixIcon: Icon(Icons.call_outlined),
                       isDense: true,
                     ),
-                    onSaved: (val) {
-                      print(val);
-                    },
                     maxLength: 10,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (input) {
                       if (input == null || input.isEmpty) {
-                        return 'Please enter valid number.';
+                        return '* Required';
+                      } else if (!input.isNumericOnly || input.length < 10) {
+                        return 'Enter valid phone number.';
                       }
                       return null;
                     },
                     onFieldSubmitted: (val) {
-                      print(val);
+                      controller.phoneController.text = val;
                     },
                   ),
                 ),
@@ -132,54 +137,67 @@ class RegisterView extends StatelessWidget {
                 ),
                 SizedBox(
                   width: 400.w,
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      label: Text("Password"),
-                      prefixIcon: Icon(Icons.lock_outline),
-                      isDense: true,
-                    ),
-                    obscureText: true,
-                    onSaved: (val) {
-                      print(val);
-                    },
-                    validator: (input) {
-                      if (input == null || input.isEmpty) {
-                        return 'Please enter valid password.';
-                      }
-                      return null;
-                    },
-                    onFieldSubmitted: (val) {
-                      print(val);
-                    },
-                  ),
+                  child: Obx(() => TextFormField(
+                        controller: controller.passwordController,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          label: const Text("Password"),
+                          prefixIcon: const Icon(Icons.lock_outline),
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                controller.obscure1.value =
+                                    !controller.obscure1.value;
+                              },
+                              icon: controller.obscure1.isFalse
+                                  ? const Icon(Icons.visibility_outlined)
+                                  : const Icon(Icons.visibility_off_outlined)),
+                          isDense: true,
+                        ),
+                        obscureText: controller.obscure1.value,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (input) {
+                          if (input == null || input.isEmpty) {
+                            return '* Required';
+                          }
+                          return null;
+                        },
+                        onFieldSubmitted: (val) {
+                          controller.passwordController.text = val;
+                        },
+                      )),
                 ),
                 SizedBox(
                   height: 20.w,
                 ),
                 SizedBox(
                   width: 400.w,
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      label: Text("Confirm password"),
-                      prefixIcon: Icon(Icons.lock_outline),
-                      isDense: true,
-                    ),
-                    onSaved: (val) {
-                      print(val);
-                    },
-                    obscureText: true,
-                    validator: (input) {
-                      if (input == null || input.isEmpty) {
-                        return 'Please enter valid password.';
-                      }
-                      return null;
-                    },
-                    onFieldSubmitted: (val) {
-                      print(val);
-                    },
-                  ),
+                  child: Obx(() => TextFormField(
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          label: const Text("Confirm password"),
+                          prefixIcon: const Icon(Icons.lock_outline),
+                          isDense: true,
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                controller.obscure2.value =
+                                    !controller.obscure2.value;
+                              },
+                              icon: controller.obscure2.isFalse
+                                  ? const Icon(Icons.visibility_outlined)
+                                  : const Icon(Icons.visibility_off_outlined)),
+                        ),
+                        obscureText: controller.obscure2.value,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (input) {
+                          if (input == null || input.isEmpty) {
+                            return '* Required';
+                          } else if (input !=
+                              controller.passwordController.text) {
+                            return 'Password did not match.';
+                          }
+                          return null;
+                        },
+                      )),
                 ),
                 SizedBox(
                   height: 20.w,
@@ -211,23 +229,34 @@ class RegisterView extends StatelessWidget {
                 // SizedBox(
                 //   height: 20.w,
                 // ),
-                SizedBox(
+                Obx(() => SizedBox(
                   width: 400.w,
                   child: ElevatedButton(
                     onPressed: () {
-                      Get.off(const HomeView());
+                      if (_formKey.currentState!.validate()) {
+                        controller.registerUser();
+                      }
                     },
-                    child: const Text("Create Account"),
+                    child: controller.isLoading.value
+                        ? SizedBox(
+                      width: 20.w,
+                      height: 20.w,
+                      child: const CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    )
+                        : const Text("Create Account"),
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(
                           CustomColors.grey700),
                       foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
+                      MaterialStateProperty.all<Color>(Colors.white),
                       padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                           EdgeInsets.all(28.w)),
                     ),
                   ),
-                ),
+                )),
               ],
             ),
           ),

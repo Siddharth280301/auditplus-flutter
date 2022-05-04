@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../customs/custom_colors.dart';
-import '../../report/report_view.dart';
+import '../../report/views/report_view.dart';
 
 class AuditReportCard extends StatelessWidget {
   const AuditReportCard({Key? key}) : super(key: key);

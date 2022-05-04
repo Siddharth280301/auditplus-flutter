@@ -5,22 +5,21 @@ import 'package:get/get.dart';
 import '../../../customs/custom_colors.dart';
 
 class SectorCard extends StatelessWidget {
-  final String title, time, desc;
+  final String title, time;
   final IconData sectorIcon;
-  final page;
+  final id;
 
   SectorCard(
-      {required this.title,
+      {required this.id,
+      required this.title,
       required this.time,
-      required this.desc,
-      required this.sectorIcon,
-      required this.page});
+      required this.sectorIcon,});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
-        Get.to(page);
+      onTap: () {
+        goToAuditForm();
       },
       splashColor: CustomColors.grey100,
       child: Container(
@@ -64,7 +63,7 @@ class SectorCard extends StatelessWidget {
                   fontWeight: FontWeight.w400),
             ),
             Text(
-              "Description: $desc",
+              "Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
               style: TextStyle(
                   color: CustomColors.grey900,
                   fontSize: 16.sp,
@@ -77,5 +76,14 @@ class SectorCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void goToAuditForm() {
+    var arguments = <String, dynamic>{
+      'sectorId': id,
+      'sectorName': title,
+      'sectorIcon': sectorIcon,
+    };
+    Get.toNamed('/auditForm', arguments: arguments);
   }
 }

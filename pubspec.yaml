@@ -39,6 +39,8 @@ dependencies:
   get:
   group_radio_button:
   google_fonts:
+  dio:
+  http:
 
 dev_dependencies:
   flutter_test:

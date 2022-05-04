@@ -7,7 +7,7 @@ import '../../../customs/custom_colors.dart';
 class AboutUsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    // TODO: implement about us
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       padding: EdgeInsets.all(48.w),

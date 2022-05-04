@@ -1,5 +1,5 @@
 import 'package:auditplus/app/customs/custom_colors.dart';
-import 'package:auditplus/app/modules/register/register_view.dart';
+import 'package:auditplus/app/modules/register/views/register_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -64,7 +64,7 @@ class LandingPage extends StatelessWidget {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            Get.to(RegisterView());
+                            Get.toNamed('/register');
                           },
                           child: Text(
                             "Request Demo",
@@ -158,7 +158,7 @@ class LandingPage extends StatelessWidget {
                   margin: EdgeInsets.symmetric(horizontal: 56.w),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(51.w),
-                    color: CustomColors.grey100,
+                    color: const Color.fromRGBO(25, 198, 253, 0.45),
                   ),
                   child: Center(
                     child: Text(

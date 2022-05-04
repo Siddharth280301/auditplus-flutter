@@ -1,3 +1,4 @@
+import 'package:auditplus/app/customs/custom_colors.dart';
 import 'package:auditplus/app/modules/index/pages/aboutus_view.dart';
 import 'package:auditplus/app/modules/index/pages/dashboard_view.dart';
 import 'package:auditplus/app/modules/index/pages/landing_view.dart';
@@ -14,6 +15,7 @@ class IndexView extends StatelessWidget {
   Widget build(BuildContext context) {
     _controller = PageController(initialPage: index.value, keepPage: true);
     return Scaffold(
+      backgroundColor: CustomColors.grey200,
       body: Row(
         children: [
           Obx(() => NavigationRail(
